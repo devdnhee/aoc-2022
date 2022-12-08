@@ -1,4 +1,5 @@
 import numpy as np
+import re
 
 def read_field(fp):
     lines = open(fp).readlines()
