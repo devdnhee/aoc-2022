@@ -54,6 +54,5 @@ def simulation(fp):
 
 
 if __name__ == "__main__":
-    # First star
     print(simulation("../tests/10a.txt"))
     print(simulation("../input/10.txt"))
