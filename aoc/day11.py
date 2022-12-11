@@ -19,15 +19,15 @@ class Monkey:
     def update(self, test_result, friend):
         self.friends[test_result] = friend
 
-    def throw_item(self):
+    def throw_item(self, ring=None):
         item = self.items.popleft()
-        # print(f"\tMonkey inspects an item with a worry level of {item}.")
-        item = self.operation(item)
-        # print(f"\tWorry level -> {item}.")
-        item = item // self.worry_level
-        # print(f"\tMonkey gets bored with item. Worry level is divided by 3 to {item}.")
+        if ring and self.worry_level == 1:
+            # performance optimisation with modulo
+            item = self.operation(item) % ring
+        else:
+            item = self.operation(item) // self.worry_level
+
         friend = self.friends[not bool(item % self.test)]
-        # print(f"\tItem with worry level {item} is thrown to monkey {friend}.")
         return item, friend
 
     def check_throw(self):
@@ -79,18 +79,20 @@ class Monkey:
 
 class MonkeyManager:
 
-    def __init__(self, monkeys):
+    def __init__(self, monkeys, ring=False):
         self.monkeys = monkeys
         self.inspections = {
             idx: 0 for idx, monkey in enumerate(self.monkeys)
         }
-        return
+        self.ring = None
+        if ring:
+            self.ring = np.prod(np.unique([monkey.test for monkey in self.monkeys]))
 
     def play_turn(self, monkey_id):
         monkey = self.monkeys[monkey_id]
         while monkey.check_throw():
             self.inspections[monkey_id] += 1
-            new_item, receiving_monkey_id = monkey.throw_item()
+            new_item, receiving_monkey_id = monkey.throw_item(self.ring)
             self.monkeys[receiving_monkey_id].receive_item(new_item)
 
     def play_round(self):
@@ -102,19 +104,19 @@ class MonkeyManager:
         return np.prod(sorted(self.inspections.values())[-2:])
 
     @classmethod
-    def from_string(cls, text, **kwargs):
+    def from_string(cls, text, ring=None, **kwargs):
         monkey_texts = text.split('\n\n')
         monkeys = [Monkey.from_string(text, **kwargs) for text in monkey_texts]
-        return MonkeyManager(monkeys)
+        return MonkeyManager(monkeys, ring=ring)
         # for monkey_text in enumerate(monkey_texts):
 
     def __str__(self):
         return '\n'.join([str(monkey) for monkey in self.monkeys])
 
 
-def simulation(fp, n_rounds=20, worry_level=3):
+def simulation(fp, ring=False, n_rounds=20, worry_level=3):
     text_input = open(fp).read()
-    manager = MonkeyManager.from_string(text_input, worry_level=worry_level)
+    manager = MonkeyManager.from_string(text_input, ring=ring, worry_level=worry_level)
     for _ in tqdm(range(n_rounds)):
         manager.play_round()
 
@@ -123,4 +125,5 @@ def simulation(fp, n_rounds=20, worry_level=3):
 
 if __name__ == "__main__":
     # print(simulation("../tests/11.txt"))
-    print(simulation("../tests/11.txt", worry_level=1, n_rounds=10000))
+    # print(simulation("../tests/11.txt", ring=True, worry_level=1, n_rounds=10000))
+    print(simulation("../input/11.txt", ring=True, worry_level=1, n_rounds=10000))
