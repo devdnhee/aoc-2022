@@ -86,7 +86,7 @@ def simulation_part2(fp):
 
 
 if __name__ == "__main__":
-    print(simulation("../tests/12.txt"))
+    print(simulation_part1("../tests/12.txt"))
     print(simulation_part2("../input/12.txt"))
     # print(simulation("../tests/11.txt", ring=True, worry_level=1, n_rounds=10000))
     # print(simulation("../input/11.txt", ring=True, worry_level=1, n_rounds=10000))
