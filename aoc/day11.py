@@ -124,6 +124,6 @@ def simulation(fp, ring=False, n_rounds=20, worry_level=3):
     return manager.monkey_business()
 
 if __name__ == "__main__":
-    # print(simulation("../tests/11.txt"))
-    # print(simulation("../tests/11.txt", ring=True, worry_level=1, n_rounds=10000))
-    print(simulation("../input/11.txt", ring=True, worry_level=1, n_rounds=10000))
+    print(simulation("../tests/11.txt"))
+    print(simulation("../tests/11.txt", ring=True, worry_level=1, n_rounds=10000))
+    # print(simulation("../input/11.txt", ring=True, worry_level=1, n_rounds=10000))

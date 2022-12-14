@@ -93,6 +93,6 @@ def get_decoder_key(fp, dividers=[[[2]], [[6]]]):
 
 if __name__ == "__main__":
     print(sum_index_sorted("../tests/13.txt"))
-    print(sum_index_sorted("../input/13.txt"))
-    print(get_decoder_key("../tests/13.txt"))
+    # print(sum_index_sorted("../input/13.txt"))
+    # print(get_decoder_key("../tests/13.txt"))
     print(get_decoder_key("../input/13.txt"))

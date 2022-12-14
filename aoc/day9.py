@@ -92,9 +92,9 @@ def simulation(fp, rope_length=2):
 if __name__ == "__main__":
     # First star
     print(simulation("../tests/9.txt"))
-    print(simulation("../input/9.txt"))
+    # print(simulation("../input/9.txt"))
 
     # Second star
     print(simulation("../tests/9.txt", rope_length=10))
     print(simulation("../tests/9b.txt", rope_length=10))
-    print(simulation("../input/9.txt", rope_length=10))
+    # print(simulation("../input/9.txt", rope_length=10))
