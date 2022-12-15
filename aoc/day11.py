@@ -6,9 +6,11 @@ from tqdm import tqdm
 
 RE_START_ITEMS = re.compile(r"Starting items: ((?:\d+,\s)+)")
 
-class Monkey:
 
-    def __init__(self, id=0, items=None, operation=None, test=None, friends=None, worry_level=3):
+class Monkey:
+    def __init__(
+        self, id=0, items=None, operation=None, test=None, friends=None, worry_level=3
+    ):
         self.id = id
         self.items = items
         self.operation = operation
@@ -36,41 +38,46 @@ class Monkey:
     def receive_item(self, item):
         self.items.append(item)
 
-
     @classmethod
     def parse_operation_string(cls, op):
         op = op.strip()
-        operation, value = re.search(r'old ([+*]) (\w+)', op).groups()
-        if value == 'old':
-            return (lambda x: x * x) if operation == '*' else (lambda x: x + x)
+        operation, value = re.search(r"old ([+*]) (\w+)", op).groups()
+        if value == "old":
+            return (lambda x: x * x) if operation == "*" else (lambda x: x + x)
         else:
-            return (lambda x: x * int(value)) if operation == '*' else (lambda x: x + int(value))
+            return (
+                (lambda x: x * int(value))
+                if operation == "*"
+                else (lambda x: x + int(value))
+            )
 
     @classmethod
     def from_string(cls, text, worry_level=3):
         friends = dict()
         init_kwargs = dict()
-        for line in text.split('\n'):
-            if mo := re.match('^Monkey (\d+):\s?', line):
+        for line in text.split("\n"):
+            if mo := re.match("^Monkey (\d+):\s?", line):
                 init_kwargs["id"] = int(mo.group(1))
                 continue
             line = line.strip()
-            if line.startswith('Starting items'):
-                init_kwargs["items"] = deque(int(match) for match in re.findall('\d+', line))
-            elif line.startswith('Operation'):
+            if line.startswith("Starting items"):
+                init_kwargs["items"] = deque(
+                    int(match) for match in re.findall("\d+", line)
+                )
+            elif line.startswith("Operation"):
                 init_kwargs["operation"] = Monkey.parse_operation_string(line)
-            elif line.startswith('Test'):
-                init_kwargs["test"] = int(re.search('(\d+)', line).group(1))
-            elif line.startswith('If true'):
-                true_friend = int(re.search('(\d+)', line).group(1))
+            elif line.startswith("Test"):
+                init_kwargs["test"] = int(re.search("(\d+)", line).group(1))
+            elif line.startswith("If true"):
+                true_friend = int(re.search("(\d+)", line).group(1))
                 friends[True] = true_friend
-            elif line.startswith('If false'):
-                false_friend = int(re.search('(\d+)', line).group(1))
+            elif line.startswith("If false"):
+                false_friend = int(re.search("(\d+)", line).group(1))
                 friends[False] = false_friend
             else:
-                raise Exception(f'Unrecognized monkey line: {line}')
+                raise Exception(f"Unrecognized monkey line: {line}")
 
-        init_kwargs.update({'friends': friends})
+        init_kwargs.update({"friends": friends})
         return Monkey(worry_level=worry_level, **init_kwargs)
 
     def __str__(self):
@@ -78,12 +85,9 @@ class Monkey:
 
 
 class MonkeyManager:
-
     def __init__(self, monkeys, ring=False):
         self.monkeys = monkeys
-        self.inspections = {
-            idx: 0 for idx, monkey in enumerate(self.monkeys)
-        }
+        self.inspections = {idx: 0 for idx, monkey in enumerate(self.monkeys)}
         self.ring = None
         if ring:
             self.ring = np.prod(np.unique([monkey.test for monkey in self.monkeys]))
@@ -105,13 +109,13 @@ class MonkeyManager:
 
     @classmethod
     def from_string(cls, text, ring=None, **kwargs):
-        monkey_texts = text.split('\n\n')
+        monkey_texts = text.split("\n\n")
         monkeys = [Monkey.from_string(text, **kwargs) for text in monkey_texts]
         return MonkeyManager(monkeys, ring=ring)
         # for monkey_text in enumerate(monkey_texts):
 
     def __str__(self):
-        return '\n'.join([str(monkey) for monkey in self.monkeys])
+        return "\n".join([str(monkey) for monkey in self.monkeys])
 
 
 def simulation(fp, ring=False, n_rounds=20, worry_level=3):
@@ -122,6 +126,7 @@ def simulation(fp, ring=False, n_rounds=20, worry_level=3):
 
     print(f"\n{manager}")
     return manager.monkey_business()
+
 
 if __name__ == "__main__":
     print(simulation("../tests/11.txt"))
