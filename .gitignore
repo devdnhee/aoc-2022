@@ -1,3 +1,8 @@
 .idea
 input/*.txt
+aoc/notebooks
 *.pyc
+.DS_Store
+*.json
+*.png
+*.html
