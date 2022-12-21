@@ -6,3 +6,5 @@ aoc/notebooks
 *.json
 *.png
 *.html
+*.csv
+aoc/pstats
